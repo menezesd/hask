@@ -36,7 +36,11 @@ msort [] = []
 msort [x] = [x]
 msort xs = merge (msort (fst (halve xs))) (msort (snd (halve xs)))
 
--- dec2int [2,3,4,5]
+-- dec2int [2,3,4,5] = 2345
+-- [Int] --> Int
 dec2intR xs = sum [ w * b | (w,b) <- zip weights (reverse xs)] where weights = iterate (*10) 1
 
 dec2int xs = foldl (\x y -> 10 * x + y) 0 xs
+
+unfold p h t x | p x = []
+               |otherwise h x : unfold p h t (t x)
