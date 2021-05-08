@@ -16,3 +16,27 @@ replicate n a = [a | _ <- [1..n]]
 
 pyths n = [(a,b,c) | a <- [1..n], b <- [1..n], c <- [1..n], a*a + b*b == c*c]
 
+dot xs ys = [a*b | (a,b) <- zip xs ys]
+
+factorial n = product [1..n]
+
+factorialR 0 = 1
+factorialR (n) = (n) * factorialR (n-1)
+
+merge [] xs = xs
+merge xs [] = xs
+merge (x:xs) (y:ys) | x == y   = x : y : merge xs ys 
+                    | x < y    = x : merge xs (y:ys)
+                    |otherwise = y : merge ys (x:xs)
+					
+halve :: [a] -> ([a],[a])
+halve xs = (take ((length xs) `div` 2) xs, drop ((length xs) `div` 2) xs)
+
+msort [] = []
+msort [x] = [x]
+msort xs = merge (msort (fst (halve xs))) (msort (snd (halve xs)))
+
+-- dec2int [2,3,4,5]
+dec2intR xs = sum [ w * b | (w,b) <- zip weights (reverse xs)] where weights = iterate (*10) 1
+
+dec2int xs = foldl (\x y -> 10 * x + y) 0 xs
