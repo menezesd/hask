@@ -7,7 +7,7 @@ sig
   val string_of_node : node -> string
   val gen : unit -> node
 end
-
+ 
 (* A signature for directed graphs with unweighted edges *)
 module type GRAPH =
 sig 

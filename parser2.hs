@@ -1,3 +1,5 @@
+import Data.Char
+
 type Parser a = String -> [(a, String)]
 
 ret :: a -> Parser a
@@ -184,7 +186,7 @@ factor = (symbol "(" =>> \_ ->
          +++ natural
 
 eval :: String -> Int
-eval xs = case parse expr xs of
+eval xs = case parse expr' xs of
             [(n, [])]  -> n
             [(_, out)] -> error ("unused input " ++ out)
             []         -> error "invalid input"
@@ -251,3 +253,23 @@ factor' = (symbol "(" =>> \_ ->
 
 -- term1 ::= term2 ('*' term1 | '/' term1 | e)
 -- term2 ::= factor ('^' term2 | e)
+
+term1 = term2 =>> \t2 ->
+               (symbol "*" =>> \_ ->
+                 term1 =>> \t1 ->
+                   ret (t2 * t1))
+           +++ (symbol "/" =>> \_ ->
+                 term1 =>> \t1 ->
+                   ret (t2 `div` t1))
+           +++ ret t2
+
+term2 :: Parser Int
+term2 = factor =>> \f ->
+             (symbol "^" =>> \_ ->
+               term2 =>> \t2 ->
+                 ret (f ^ t2))
+          +++ ret f
+-- > term1 "2^3 * 4"
+-- [(32, "")]
+
+

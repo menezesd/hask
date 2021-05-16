@@ -43,4 +43,4 @@ dec2intR xs = sum [ w * b | (w,b) <- zip weights (reverse xs)] where weights = i
 dec2int xs = foldl (\x y -> 10 * x + y) 0 xs
 
 unfold p h t x | p x = []
-               |otherwise h x : unfold p h t (t x)
+               | otherwise h x : unfold p h t (t x)
